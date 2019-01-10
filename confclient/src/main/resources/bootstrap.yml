@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: confclient
+  profiles:
+    active:
+      - default
+  cloud:
+    config:
+      uri:
+      - http://localhost:8888
+encrypt:
+  key: IMSYMMETRIC
