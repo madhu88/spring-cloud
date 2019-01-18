@@ -1,5 +1,7 @@
 package com.licensesservice.service;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +31,10 @@ public class LicenseService {
 		license.setOrganizationId(Integer.toString(organization.getOrgId()));
 		return license;
 	}
-	
+		
 	private Organization retrieveOrgInfo(String organizationId, String clientType) {
 		Organization organization = null;
-		
+		randomlyRunLong();
 		switch (clientType) {
 			case "discovery":
 				System.out.println("Using dicovery client");
@@ -57,5 +59,22 @@ public class LicenseService {
 		}
 		
 		return organization;
+	}
+	
+	//To simulate the thread delay
+	private void randomlyRunLong() {
+		Random rand = new Random();
+		
+		int randomNum = rand.nextInt((3 - 1) + 1) + 1;
+		
+		if (randomNum == 3) sleep();
+	}
+	
+	private void sleep() {
+		try {
+			Thread.sleep(11000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
