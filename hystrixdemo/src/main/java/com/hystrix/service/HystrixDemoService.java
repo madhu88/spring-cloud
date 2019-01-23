@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.hystrix.config.HystrixDemoConfig;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 @Service
 public class HystrixDemoService {
@@ -13,7 +14,9 @@ public class HystrixDemoService {
 	private HystrixDemoConfig hystrixDemoService;
 	
 	//the default timeout value for hystrix thread wait is 1000ms
-	@HystrixCommand(fallbackMethod="fallBackSayHello")
+	//@HystrixCommand(fallbackMethod="fallBackSayHello")
+	@HystrixCommand(fallbackMethod="fallBackSayHello", 
+			commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds" , value = "2000")})
 	public String sayHello(final String name) {
 		System.out.println("Start of say hello");
 		System.out.println("ThreadWaitTime = " +  hystrixDemoService.getThreadWaitTime());
