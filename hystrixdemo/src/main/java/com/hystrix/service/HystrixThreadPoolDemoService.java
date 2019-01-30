@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hystrix.config.HystrixDemoConfig;
+import com.hystrix.utils.UserContextHolder;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
@@ -27,10 +28,12 @@ public class HystrixThreadPoolDemoService {
 					@HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "5")
 				})
 	public String printThreadPoolDemo(final String input) {
+		System.out.println("HystrixThreadPoolDemoService tmx-correlation-id = " + UserContextHolder.getContext().getCorrelationId());
 		return "{\"printThreadPoolDemo printing \":\"" + input + "\"}";
 	}
 	
 	public String printThreadPoolDemoFallBack(final String input) {
+		System.out.println("HystrixThreadPoolDemoService tmx-correlation-id = " + UserContextHolder.getContext().getCorrelationId());
 		return "{\"printThreadPoolDemoFallBack printing \":\"" + input + "\"}";
 	}
 }
