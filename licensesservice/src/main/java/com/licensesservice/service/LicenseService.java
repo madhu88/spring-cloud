@@ -1,5 +1,7 @@
 package com.licensesservice.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +11,12 @@ import com.licensesservice.clients.OrganizationRestTemplate;
 import com.licensesservice.model.License;
 import com.licensesservice.model.Organization;
 import com.licensesservice.model.OrganizationServiceRequest;
+import com.licensesservice.utils.UserContextHolder;
 
 @Service
 public class LicenseService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(LicenseService.class);
 	
 	@Autowired
 	private OrganizationDiscoveryClient organizationDiscoveryClient;
@@ -32,6 +37,8 @@ public class LicenseService {
 		
 	private Organization retrieveOrgInfo(String organizationId, String clientType) {
 		Organization organization = null;
+		
+		logger.debug("tmx-correlation-id = " + UserContextHolder.getContext().getCorrelationId());
 		
 		switch (clientType) {
 			case "discovery":
