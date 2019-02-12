@@ -13,7 +13,17 @@ public class FilterUtils {
     public static final String ORG_ID         = "tmx-org-id";
     public static final String PRE_FILTER_TYPE = "pre";
     public static final String POST_FILTER_TYPE = "post";
-    public static final String ROUTE_FILTER_TYPE = "route";
+    public static final String ROUTE_FILTER_TYPE = "route";    
+    public static final String SERVICE_VERSION = "service-version";
+    
+    public String getServiceVersion() {
+    	RequestContext requestContext = RequestContext.getCurrentContext();
+    	if (null != requestContext.getRequest().getHeader(SERVICE_VERSION)) {
+    		return requestContext.getRequest().getHeader(SERVICE_VERSION);
+    	} else {
+    		return requestContext.getZuulRequestHeaders().get(SERVICE_VERSION);
+    	}
+    }
     
     public String getCorrelationId() {
     	RequestContext requestContext = RequestContext.getCurrentContext();
