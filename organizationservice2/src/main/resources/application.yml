@@ -1,0 +1,21 @@
+server:
+  port: 8002
+  
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7000/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        
+logging:
+  level:
+    com.organizationservice: debug
