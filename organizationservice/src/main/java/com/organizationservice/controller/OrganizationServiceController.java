@@ -31,7 +31,7 @@ public class OrganizationServiceController {
 		ResponseEntity<Object> responseEntity = null;
 		OrganizationServiceResponse organizationServiceResponse = new OrganizationServiceResponse();
 		organizationServiceResponse.setOrgId(organizationServiceRequest.getOrgId());
-		organizationServiceResponse.setOrgName("Test name for org with ID " +  organizationServiceRequest.getOrgId());
+		organizationServiceResponse.setOrgName("V1: Test name for org with ID " +  organizationServiceRequest.getOrgId());
 		responseEntity = new ResponseEntity<>(organizationServiceResponse, HttpStatus.OK);
 		logger.debug("tmx-correlation-id = " + UserContextHolder.getContext().getCorrelationId());
 		return responseEntity;
@@ -50,7 +50,7 @@ public class OrganizationServiceController {
 		ResponseEntity<Object> responseEntity = null;
 		OrganizationServiceResponse organizationServiceResponse = new OrganizationServiceResponse();
 		organizationServiceResponse.setOrgId(organizationServiceRequest.getOrgId());
-		organizationServiceResponse.setOrgName("Test name for org with ID " +  organizationServiceRequest.getOrgId());
+		organizationServiceResponse.setOrgName("V1: Test name for org with ID " +  organizationServiceRequest.getOrgId());
 		responseEntity = new ResponseEntity<>(organizationServiceResponse, HttpStatus.OK);
 		logger.debug("tmx-correlation-id = " + UserContextHolder.getContext().getCorrelationId());
 		return responseEntity;
