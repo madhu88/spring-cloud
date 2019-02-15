@@ -13,6 +13,14 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.client.RestTemplate;
 
 import com.licensesservice.interceptor.UserContextInterceptor;
@@ -20,9 +28,10 @@ import com.licensesservice.interceptor.UserContextInterceptor;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
+@EnableResourceServer
 public class LicensesserviceApplication {
 	
-	 private static final Logger logger = LoggerFactory.getLogger(LicensesserviceApplication.class);
+	private static final Logger logger = LoggerFactory.getLogger(LicensesserviceApplication.class);
 	
 	@LoadBalanced
 	@Bean
@@ -38,6 +47,21 @@ public class LicensesserviceApplication {
 		logger.debug("Added the interseptor");
 		return restTemplate;
 	}
+	
+	/*@Bean
+	public OAuth2ClientContext oauth2ClientContext() {
+		return new DefaultOAuth2ClientContext(new DefaultAccessTokenRequest());
+	}
+	
+	@Bean
+	public OAuth2RestTemplate oauth2RestTemplate(OAuth2ClientContext oauth2ClientContext,
+			OAuth2ProtectedResourceDetails details) {
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		securityContext.getAuthentication().getName();
+		logger.debug("**** name " + securityContext.getAuthentication().getName());
+		logger.debug("**** creds " + securityContext.getAuthentication().getCredentials());
+		return new OAuth2RestTemplate(details, oauth2ClientContext);
+	}*/
 	
 	public static void main(String[] args) {
 		SpringApplication.run(LicensesserviceApplication.class, args);

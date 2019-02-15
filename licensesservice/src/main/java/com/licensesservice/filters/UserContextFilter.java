@@ -33,9 +33,11 @@ public class UserContextFilter implements Filter {
 		UserContextHolder.getContext().setUserId(httpServletRequest.getHeader(UserContext.USER_ID));
 		UserContextHolder.getContext().setAuthToken(httpServletRequest.getHeader(UserContext.AUTH_TOKEN));
 		UserContextHolder.getContext().setOrgId(httpServletRequest.getHeader(UserContext.ORG_ID));
+		UserContextHolder.getContext().setAuthorization(httpServletRequest.getHeader(UserContext.AUTHORIZATION));
 		
 		logger.debug("test debug " + UserContextHolder.getContext().getCorrelationId());
 		logger.info("test info " + UserContextHolder.getContext().getCorrelationId());
+		logger.debug("*** Authorization = " + UserContextHolder.getContext().getAuthorization());
 		
 		System.out.println("UserContextFilter tmx-correlation-id = " + UserContextHolder.getContext().getCorrelationId());
 		

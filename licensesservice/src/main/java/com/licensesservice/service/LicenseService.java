@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.licensesservice.clients.OrganizationDiscoveryClient;
 import com.licensesservice.clients.OrganizationFeignClient;
+import com.licensesservice.clients.OrganizationOAuth2RestTemplate;
 import com.licensesservice.clients.OrganizationRestTemplate;
 import com.licensesservice.model.License;
 import com.licensesservice.model.Organization;
@@ -26,6 +27,9 @@ public class LicenseService {
 	
 	@Autowired
 	private OrganizationFeignClient organizationFeignClient;
+	
+	@Autowired
+	private OrganizationOAuth2RestTemplate organizationOAuth2RestTemplate;
 
 	public License getLicense(String organizationId, String licenseId, String clientType) {
 		License license = new License();
@@ -50,13 +54,18 @@ public class LicenseService {
 				System.out.println("Using rest template client");
 				organization = organizationRestTemplate.getOrganization(organizationId);
 				break;
+			
+			/*case "oauthrest":
+				System.out.println("Using oAuth2 rest template client");
+				organization = organizationOAuth2RestTemplate.getOrganization(organizationId);
+				break;*/
 				
 			case "feign":
 				System.out.println("Using feign client");
 				OrganizationServiceRequest organizationServiceRequest = new OrganizationServiceRequest();
 				organizationServiceRequest.setOrgId(Integer.parseInt(organizationId));
 				organization = organizationFeignClient.getOrganization(organizationServiceRequest);
-				break;
+				break;						
 				
 			default:
 				System.out.println("Using default rest template");
