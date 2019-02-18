@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.organizationservice.utils.UserContextHolder;
 import com.organizationservice.config.ConfigEntries;
+import com.organizationservice.events.source.SimpleSourceBean;
 import com.organizationservice.model.request.OrganizationServiceRequest;
 import com.organizationservice.model.response.OrganizationServiceResponse;
 
@@ -24,6 +25,9 @@ public class OrganizationServiceController {
 	
 	@Autowired
 	private ConfigEntries configEntries;
+	
+	@Autowired
+	private SimpleSourceBean simpleSourceBean;
 	
 	@PostMapping(value="/getname", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> getOrgName(@RequestBody OrganizationServiceRequest organizationServiceRequest) {
@@ -55,5 +59,18 @@ public class OrganizationServiceController {
 		logger.debug("tmx-correlation-id = " + UserContextHolder.getContext().getCorrelationId());
 		return responseEntity;
 	}
-
+	
+	@PostMapping(value="/publish", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> publichEvent(@RequestBody OrganizationServiceRequest organizationServiceRequest) {
+		logger.debug("organizationServiceRequest.getOrgId = " + organizationServiceRequest.getOrgId());		
+		ResponseEntity<Object> responseEntity = null;
+		OrganizationServiceResponse organizationServiceResponse = new OrganizationServiceResponse();
+		organizationServiceResponse.setOrgId(organizationServiceRequest.getOrgId());
+		organizationServiceResponse.setOrgName("V1: Test name for org with ID " +  organizationServiceRequest.getOrgId());
+		responseEntity = new ResponseEntity<>(organizationServiceResponse, HttpStatus.OK);
+		logger.debug("****publishing the event");
+		simpleSourceBean.publishOrgChange("orgPubEvent", Integer.toString(organizationServiceRequest.getOrgId()));
+		logger.debug("tmx-correlation-id = " + UserContextHolder.getContext().getCorrelationId());
+		return responseEntity;
+	}
 }
