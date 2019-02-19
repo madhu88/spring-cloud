@@ -9,6 +9,7 @@ import com.licensesservice.clients.OrganizationDiscoveryClient;
 import com.licensesservice.clients.OrganizationFeignClient;
 import com.licensesservice.clients.OrganizationOAuth2RestTemplate;
 import com.licensesservice.clients.OrganizationRestTemplate;
+import com.licensesservice.clients.OrganizationRestTemplateClient;
 import com.licensesservice.model.License;
 import com.licensesservice.model.Organization;
 import com.licensesservice.model.OrganizationServiceRequest;
@@ -24,6 +25,9 @@ public class LicenseService {
 	
 	@Autowired
 	private OrganizationRestTemplate organizationRestTemplate;
+	
+	@Autowired
+	private OrganizationRestTemplateClient organizationRestTemplateClient;
 	
 	@Autowired
 	private OrganizationFeignClient organizationFeignClient;
@@ -53,6 +57,11 @@ public class LicenseService {
 			case "rest":
 				System.out.println("Using rest template client");
 				organization = organizationRestTemplate.getOrganization(organizationId);
+				break;
+				
+			case "cache":
+				System.out.println("Using cache template client");
+				organization = organizationRestTemplateClient.getOrganization(organizationId);
 				break;
 			
 			/*case "oauthrest":

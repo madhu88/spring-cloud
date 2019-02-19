@@ -1,8 +1,10 @@
 package com.licensesservice.model;
 
-public class Organization {
+import java.io.Serializable;
 
-public Integer orgId;
+public class Organization implements Serializable {
+
+	public Integer orgId;
 	
 	public String orgName;
 

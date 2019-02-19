@@ -5,16 +5,19 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +29,7 @@ import org.springframework.security.oauth2.client.token.DefaultAccessTokenReques
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.client.RestTemplate;
 
+import com.licensesservice.config.LicensesServiceConfig;
 import com.licensesservice.events.model.OrganizationChangeModel;
 import com.licensesservice.interceptor.UserContextInterceptor;
 
@@ -37,6 +41,24 @@ import com.licensesservice.interceptor.UserContextInterceptor;
 public class LicensesserviceApplication {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LicensesserviceApplication.class);
+	
+	@Autowired
+	private LicensesServiceConfig licensesServiceConfig;
+	
+	@Bean
+	public JedisConnectionFactory jedisConnectionFactory() {		
+		RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration();
+		redisConfiguration.setHostName(licensesServiceConfig.getRedisServer());
+		redisConfiguration.setPort(licensesServiceConfig.getRedisPort());
+		return new JedisConnectionFactory(redisConfiguration);
+	}
+	
+	@Bean
+	public RedisTemplate<String, Object> getRedisTemplate() {
+		RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
+		template.setConnectionFactory(jedisConnectionFactory());
+		return template;
+	}
 	
 	@StreamListener(Sink.INPUT)
 	public void loggerSink(OrganizationChangeModel orgChange) {
