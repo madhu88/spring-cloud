@@ -11,6 +11,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.core.context.SecurityContext;
@@ -23,15 +26,22 @@ import org.springframework.security.oauth2.client.token.DefaultAccessTokenReques
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.client.RestTemplate;
 
+import com.licensesservice.events.model.OrganizationChangeModel;
 import com.licensesservice.interceptor.UserContextInterceptor;
 
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableResourceServer
+@EnableBinding(Sink.class)
 public class LicensesserviceApplication {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LicensesserviceApplication.class);
+	
+	@StreamListener(Sink.INPUT)
+	public void loggerSink(OrganizationChangeModel orgChange) {
+		logger.debug("Received an event for organization id {}", orgChange.getCorrelationId());
+	}
 	
 	@LoadBalanced
 	@Bean
